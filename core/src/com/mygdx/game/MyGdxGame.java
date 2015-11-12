@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -14,7 +15,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 
-public class MyGdxGame extends ApplicationAdapter {
+public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 	SpriteBatch batch;
 	Texture img,imgDude,imgBackground;
 	float fTouchX, fTouchY,fPx=640,fPy=640;
@@ -58,4 +59,26 @@ public class MyGdxGame extends ApplicationAdapter {
 		batch.draw(imgDude, fTouchX-(imgDude.getWidth()/2) , fTouchY-(imgDude.getHeight()/2));
 		batch.end();
 	}
+	public boolean touchUp(int n1, int n2, int n3, int n4) {return false;}
+	public boolean touchDown(int n1, int n2, int n3, int n4) {
+		return false;
+	}
+	public boolean touchDragged(int n1, int n2, int n3) {
+		return false;
+	}
+	public boolean keyTyped(char character) {
+		return false;
+	}
+	public boolean keyDown(int keycode) {return false; }
+	public boolean keyUp(int keycode) {
+		return false;
+	}
+	public boolean mouseMoved(int n1, int n2) {
+		return false;
+	}
+	public boolean scrolled(int n1) {
+		return false;
+	}
+
 }
+
