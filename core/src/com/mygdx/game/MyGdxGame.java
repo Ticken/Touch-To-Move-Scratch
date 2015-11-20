@@ -14,6 +14,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 	SpriteBatch batch;
@@ -31,11 +32,15 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
 		tiledMap = new TmxMapLoader().load("MyMap.tmx");
+		tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 		imgDude = new Texture("player.png");
 		batch = new SpriteBatch();
-		imgBackground = new Texture("touchBackground.png");
+		imgBackground = new Texture("background.png");
 		Rectangle recPlayer = new Rectangle();
 		recPlayer.set(fPx,fPy, 16,16);
+		batch.begin();
+		batch.draw(imgBackground, 0, 0);
+		batch.end();
 
 
 
@@ -47,13 +52,13 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 		camera.update();
 		tiledMapRenderer.setView(camera);
 		tiledMapRenderer.render();
-		Gdx.gl.glClearColor(1, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+//		Gdx.gl.glClearColor(1, 0, 0, 1);
+//		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		if (Gdx.input.isTouched()) {
 			Vector3 touchPos = new Vector3();
 			touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 			fTouchX = (touchPos.x);
-			fTouchY = (touchPos.y);
+			fTouchY = (camera.viewportHeight*3)-(touchPos.y);
 		}
 		batch.begin();
 		batch.draw(imgDude, fTouchX-(imgDude.getWidth()/2) , fTouchY-(imgDude.getHeight()/2));
