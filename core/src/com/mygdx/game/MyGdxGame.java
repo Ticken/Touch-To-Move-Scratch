@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -18,11 +19,12 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 	SpriteBatch batch;
-	Texture img,imgDude,imgBackground;
+	Texture tx,txPlayer,txBackground;
 	float fTouchX, fTouchY,fPx=640,fPy=640;
 	TiledMap tiledMap;
 	OrthographicCamera camera;
 	TiledMapRenderer tiledMapRenderer;
+	Sprite sprPlayer;
 
 	@Override
 	public void create () {
@@ -30,16 +32,19 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 		camera.setToOrtho(false, 424, 250);
 		camera.position.set(fPx - 212, fPy - 117, 0);
 		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+		tx = new Texture("badlogic.jpg");
 		tiledMap = new TmxMapLoader().load("MyMap.tmx");
 		tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
-		imgDude = new Texture("player.png");
+		txPlayer = new Texture("player.png");
 		batch = new SpriteBatch();
-		imgBackground = new Texture("background.png");
-		Rectangle recPlayer = new Rectangle();
-		recPlayer.set(fPx,fPy, 16,16);
+		txBackground = new Texture("background.png");
+		Sprite sprPlayer = new Sprite();
+		sprPlayer.setBounds(fPx,fPy, 16,16);
+		sprPlayer.setX(fPx);
+		sprPlayer.setY(fPy);
 		batch.begin();
-		batch.draw(imgBackground, 0, 0);
+		batch.draw(txBackground, 0, 0);
+		batch.draw(txPlayer, 200, 200);
 		batch.end();
 
 
@@ -59,9 +64,17 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 			touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 			fTouchX = (touchPos.x);
 			fTouchY = (camera.viewportHeight*3)-(touchPos.y);
+			float fDistX = -(fPx-fTouchX);
+			float fDistY = -(fPy-fTouchY);
+			double dDistTotal = Math.sqrt((fDistX*fDistX) + (fDistY*fDistY));
+			float fSpeed = 80*Gdx.graphics.getDeltaTime();
+			double dFract = fSpeed/dDistTotal;
+			fPx = (float)(fPx+(dFract*fDistX));
+			fPy = (float)(fPy+(dFract*fDistY));
 		}
 		batch.begin();
-		batch.draw(imgDude, fTouchX-(imgDude.getWidth()/2) , fTouchY-(imgDude.getHeight()/2));
+		batch.draw(txPlayer, fPx,fPy);
+		//batch.draw(imgDude, fTouchX-(imgDude.getWidth()/2) , fTouchY-(imgDude.getHeight()/2));
 		batch.end();
 	}
 	public boolean touchUp(int n1, int n2, int n3, int n4) {return false;}
@@ -86,4 +99,3 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 	}
 
 }
-
